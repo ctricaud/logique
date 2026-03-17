@@ -5,6 +5,92 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jeu de Logique</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Sélecteur de banque ── */
+    .banque-section {
+      margin-bottom: 32px;
+    }
+    .banque-label {
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .banque-item input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .banque-liste {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 560px;
+      margin: 0 auto 8px;
+    }
+    .banque-item {
+      cursor: pointer;
+      display: block;
+    }
+    .banque-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 18px 24px;
+      background: #111111;
+      border: 3px solid #333333;
+      border-radius: 12px;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+      user-select: none;
+    }
+    .banque-item:hover .banque-card {
+      border-color: #ffdd00;
+      background: #1a1a1a;
+      transform: translateX(6px);
+    }
+    .banque-item input[type="radio"]:checked + .banque-card {
+      border-color: #ffdd00;
+      background: rgba(255, 221, 0, 0.07);
+      transform: translateX(6px);
+    }
+    .banque-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 150px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .ce1-badge  { background: rgba(0,200,100,0.12); border: 2px solid #00c864; color: #00c864; }
+    .ce2-badge  { background: rgba(0,160,255,0.12); border: 2px solid #00a0ff; color: #00a0ff; }
+    .mix-badge  { background: rgba(255,160,0,0.12); border: 2px solid #ffa000; color: #ffa000; }
+    .cm1-badge  { background: rgba(220,80,255,0.12); border: 2px solid #dc50ff; color: #dc50ff; }
+    .banque-desc {
+      font-size: 1.05rem;
+      color: #cccccc;
+      line-height: 1.4;
+    }
+    #btn-start:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    #btn-start:disabled:hover {
+      background: transparent;
+      color: #ffdd00;
+    }
+    @media (max-width: 500px) {
+      .banque-card { padding: 14px 16px; gap: 12px; }
+      .banque-badge { min-width: 110px; font-size: 1rem; padding: 10px 10px; }
+      .banque-desc { font-size: 0.9rem; }
+    }
+  </style>
 </head>
 <body>
 
@@ -16,35 +102,50 @@
     <h1 class="game-title">Jeu de Logique</h1>
     <p class="game-subtitle">Entraîne ton cerveau !</p>
 
-    <div class="welcome-info">
-      <p>🎯 <strong>10 questions</strong> de logique par partie</p>
-      <p>✅ Choix multiples — clique sur la bonne réponse</p>
-      <p>🏆 Score final sur <strong>10</strong></p>
+    <!-- Sélecteur de banque -->
+    <div class="banque-section">
+      <p class="banque-label">📚 Choisis ton niveau :</p>
+      <div class="banque-liste">
+
+        <label class="banque-item">
+          <input type="radio" name="banque" value="ce1" />
+          <span class="banque-card">
+            <span class="banque-badge ce1-badge">CE1</span>
+            <span class="banque-desc">200 questions · niveau débutant</span>
+          </span>
+        </label>
+
+        <label class="banque-item">
+          <input type="radio" name="banque" value="ce2" />
+          <span class="banque-card">
+            <span class="banque-badge ce2-badge">CE2</span>
+            <span class="banque-desc">200 questions · niveau intermédiaire</span>
+          </span>
+        </label>
+
+        <label class="banque-item">
+          <input type="radio" name="banque" value="ce1ce2" />
+          <span class="banque-card">
+            <span class="banque-badge mix-badge">CE1 + CE2</span>
+            <span class="banque-desc">400 questions · niveaux mélangés</span>
+          </span>
+        </label>
+
+        <label class="banque-item">
+          <input type="radio" name="banque" value="mixte" />
+          <span class="banque-card">
+            <span class="banque-badge cm1-badge">CE1 + CE2 + CM1</span>
+            <span class="banque-desc">200 questions · tous niveaux</span>
+          </span>
+        </label>
+
+      </div>
     </div>
 
-    <p class="choose-label">Choisis ta banque de questions :</p>
-
-    <div class="banque-grid">
-      <button class="btn-banque" data-banque="ce1">
-        <span class="banque-emoji">🌱</span>
-        <span class="banque-titre">CE1</span>
-        <span class="banque-info">200 questions</span>
-      </button>
-      <button class="btn-banque" data-banque="ce2">
-        <span class="banque-emoji">📗</span>
-        <span class="banque-titre">CE2</span>
-        <span class="banque-info">200 questions</span>
-      </button>
-      <button class="btn-banque" data-banque="ce1ce2">
-        <span class="banque-emoji">📚</span>
-        <span class="banque-titre">CE1 + CE2</span>
-        <span class="banque-info">400 questions</span>
-      </button>
-      <button class="btn-banque" data-banque="mixte">
-        <span class="banque-emoji">🏆</span>
-        <span class="banque-titre">CE1 + CE2 + CM1</span>
-        <span class="banque-info">200 questions mixtes</span>
-      </button>
+    <div class="welcome-info">
+      <p>🎯 <strong>10 questions</strong> par partie</p>
+      <p>✅ Choix multiples — clique sur la bonne réponse</p>
+      <p>🏆 Score final sur <strong>10</strong></p>
     </div>
 
     <button id="btn-start" class="btn btn-large" disabled>▶ Jouer !</button>
@@ -61,7 +162,6 @@
   <!-- ── ÉCRAN DE JEU ──────────────────────── -->
   <section id="screen-game" class="screen">
 
-    <!-- Barre de progression -->
     <div class="progress-bar-wrap">
       <div class="progress-label">
         <span id="progress-label">Question 1 / 10</span>
@@ -72,7 +172,6 @@
       </div>
     </div>
 
-    <!-- Carte question -->
     <div class="question-card">
       <div class="question-meta">
         <span class="badge badge-cat" id="question-cat">Catégorie</span>
@@ -81,18 +180,13 @@
       <p class="question-text" id="question-text">Question…</p>
     </div>
 
-    <!-- Grille des options -->
-    <div class="options-grid" id="options-grid">
-      <!-- Boutons générés dynamiquement -->
-    </div>
+    <div class="options-grid" id="options-grid"></div>
 
-    <!-- Feedback -->
     <div class="feedback-box" id="feedback-box">
       <div id="feedback-text"></div>
       <div class="feedback-explication" id="feedback-explication"></div>
     </div>
 
-    <!-- Bouton Suivant -->
     <button id="btn-next" class="btn btn-large">Question suivante →</button>
 
   </section>
@@ -110,10 +204,8 @@
 
     <p id="score-message" class="score-message">Super travail !</p>
 
-    <!-- Points visuels -->
     <div class="score-dots" id="score-dots"></div>
 
-    <!-- Actions -->
     <div class="score-actions">
       <button id="btn-replay" class="btn btn-large">🔄 Rejouer</button>
       <button id="btn-home" class="btn btn-secondary">🏠 Accueil</button>

@@ -8,7 +8,6 @@ let questions = [];
 let currentIndex = 0;
 let score = 0;
 let results = [];
-let banqueChoisie = null;   // clé de la banque sélectionnée
 
 // ── Éléments du DOM ──────────────────────────
 const screens = {
@@ -40,29 +39,30 @@ const els = {
   scoreMessage:   document.getElementById('score-message'),
 };
 
+// ── Lecture de la banque sélectionnée ─────────
+function getBanqueChoisie() {
+  const radio = document.querySelector('input[name="banque"]:checked');
+  return radio ? radio.value : null;
+}
+
+// Activer le bouton Jouer dès qu'un radio est coché
+document.querySelectorAll('input[name="banque"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    els.startBtn.disabled = false;
+  });
+});
+
 // ── Navigation entre écrans ───────────────────
 function showScreen(name) {
   Object.values(screens).forEach(s => { if (s) s.classList.remove('active'); });
   if (screens[name]) screens[name].classList.add('active');
 }
 
-// ── Sélection de la banque ────────────────────
-document.querySelectorAll('.btn-banque').forEach(btn => {
-  btn.addEventListener('click', () => {
-    // Retirer la sélection précédente
-    document.querySelectorAll('.btn-banque').forEach(b => b.classList.remove('selected'));
-    // Sélectionner ce bouton
-    btn.classList.add('selected');
-    banqueChoisie = btn.dataset.banque;
-    // Activer le bouton Jouer
-    els.startBtn.disabled = false;
-    els.startBtn.classList.add('ready');
-  });
-});
-
 // ── Démarrage d'une partie ────────────────────
 async function startGame() {
+  const banqueChoisie = getBanqueChoisie();
   if (!banqueChoisie) return;
+
   showScreen('loading');
   try {
     const res = await fetch('/api/questions?banque=' + banqueChoisie);
@@ -85,20 +85,15 @@ function renderQuestion() {
   const q = questions[currentIndex];
   const total = questions.length;
 
-  // Progression
   const pct = Math.round((currentIndex / total) * 100);
   els.progressFill.style.width = pct + '%';
   els.progressLabel.textContent = `Question ${currentIndex + 1} / ${total}`;
 
-  // Meta
   els.questionCat.textContent = q.categorie;
   els.questionNiveau.textContent = niveauLabel(q.niveau);
   els.questionNiveau.className = 'badge badge-n' + q.niveau;
-
-  // Texte
   els.questionText.textContent = q.question;
 
-  // Options
   els.optionsGrid.innerHTML = '';
   const shuffledOptions = shuffle([...q.options]);
   shuffledOptions.forEach((opt, i) => {
@@ -111,7 +106,6 @@ function renderQuestion() {
     els.optionsGrid.appendChild(btn);
   });
 
-  // Reset feedback
   els.feedbackBox.className = 'feedback-box';
   els.feedbackBox.style.display = 'none';
   els.nextBtn.className = 'btn btn-large';
@@ -196,7 +190,7 @@ function showScore() {
 
   els.scoreEmoji.textContent = emoji;
   els.scoreTitle.textContent = titre;
-  els.scoreNum.textContent = score;   // le "/ 10" est dans l'HTML
+  els.scoreNum.textContent = score;
   els.scoreMessage.textContent = message;
 
   els.scoreDots.innerHTML = '';
@@ -209,13 +203,6 @@ function showScore() {
   });
 
   window.scrollTo(0, 0);
-}
-
-// ── Retour à l'accueil : reset de la sélection ──
-function goHome() {
-  // On ne remet PAS banqueChoisie à null pour garder la sélection
-  // L'utilisateur peut rechoisir ou rejouer avec la même banque
-  showScreen('welcome');
 }
 
 // ── Utilitaires ───────────────────────────────
@@ -237,7 +224,7 @@ function shuffle(arr) {
 els.startBtn.addEventListener('click', startGame);
 els.nextBtn.addEventListener('click', nextQuestion);
 els.replayBtn.addEventListener('click', startGame);
-els.homeBtn.addEventListener('click', goHome);
+els.homeBtn.addEventListener('click', () => showScreen('welcome'));
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
