@@ -9,8 +9,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ── Chargement des banques de questions ───────
 function loadJSON(filename) {
+  const filepath = path.join(__dirname, 'data', filename);
   try {
-    const raw = fs.readFileSync(path.join(__dirname, 'data', filename), 'utf8');
+    const raw = fs.readFileSync(filepath, 'utf8');
     const data = JSON.parse(raw);
     console.log(`✅ ${data.length} questions chargées depuis ${filename}`);
     return data;
@@ -21,19 +22,19 @@ function loadJSON(filename) {
 }
 
 const banques = {
-  ce1:     loadJSON('questions.json'),         // 200 questions CE1
-  ce2:     loadJSON('questionsce2.json'),       // 200 questions CE2
-  mixte:   loadJSON('questionsce1cm1.json'),    // 200 questions CE1+CE2+CM1
+  ce1:   loadJSON('questions_ce1.json'),           // 200 questions CE1
+  ce2:   loadJSON('questions_ce2.json'),           // 200 questions CE2
+  mixte: loadJSON('questions_ce1_ce2_cm1.json'),   // 200 questions CE1+CE2+CM1
 };
 
-// Banque combinée CE1+CE2 (400 questions, construite en mémoire)
+// Banque combinée CE1+CE2 construite en mémoire (pas besoin de fichier)
 banques.ce1ce2 = [...banques.ce1, ...banques.ce2];
 
-console.log(`📚 Banques disponibles :
+console.log(`\n📚 Banques disponibles :
   - ce1    : ${banques.ce1.length} questions
   - ce2    : ${banques.ce2.length} questions
   - ce1ce2 : ${banques.ce1ce2.length} questions
-  - mixte  : ${banques.mixte.length} questions`);
+  - mixte  : ${banques.mixte.length} questions\n`);
 
 // ── API : retourne 10 questions selon la banque choisie ──
 // Paramètre GET : ?banque=ce1 | ce2 | ce1ce2 | mixte
