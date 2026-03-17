@@ -193,7 +193,7 @@ function showScore() {
 
   els.scoreEmoji.textContent = emoji;
   els.scoreTitle.textContent = titre;
-  els.scoreNum.textContent = score + ' / ' + total;
+  els.scoreNum.textContent = score;   // ← uniquement le chiffre, le "/ 10" est dans l'HTML
   els.scoreMessage.textContent = message;
 
   // Points visuels

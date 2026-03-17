@@ -17,12 +17,9 @@ try {
   console.error('❌ Impossible de charger questions.json :', err.message);
 }
 
-// API : retourne 10 questions mélangées (4 niveau 1, 4 niveau 2, 2 niveau 3)
+// API : retourne 10 questions mélangées au hasard
 app.get('/api/questions', (req, res) => {
-  const n1 = shuffle(allQuestions.filter(q => q.niveau === 1)).slice(0, 4);
-  const n2 = shuffle(allQuestions.filter(q => q.niveau === 2)).slice(0, 4);
-  const n3 = shuffle(allQuestions.filter(q => q.niveau === 3)).slice(0, 2);
-  const session = shuffle([...n1, ...n2, ...n3]);
+  const session = shuffle(allQuestions).slice(0, 10);
   res.json(session);
 });
 
