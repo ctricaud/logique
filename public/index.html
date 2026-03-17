@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeu de Logique</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ── ÉCRAN D'ACCUEIL ───────────────────── -->
+  <section id="screen-welcome" class="screen active">
+    <span class="welcome-emoji" role="img" aria-label="cerveau">🧠</span>
+    <h1 class="game-title">Jeu de Logique</h1>
+    <p class="game-subtitle">Entraîne ton cerveau !</p>
+
+    <div class="welcome-info">
+      <p>🎯 <strong>10 questions</strong> de logique par partie</p>
+      <p>📚 Questions de <strong>CE1 à CM1</strong></p>
+      <p>✅ Choix multiples — clique sur la bonne réponse</p>
+      <p>🏆 Score final sur <strong>10</strong></p>
+    </div>
+
+    <button id="btn-start" class="btn btn-large">▶ Jouer !</button>
+  </section>
+
+  <!-- ── CHARGEMENT ────────────────────────── -->
+  <section id="loading" class="screen">
+    <div style="text-align:center; padding:80px 20px;">
+      <div class="spinner"></div>
+      <p style="font-size:1.4rem; color:#cccccc;">Chargement des questions…</p>
+    </div>
+  </section>
+
+  <!-- ── ÉCRAN DE JEU ──────────────────────── -->
+  <section id="screen-game" class="screen">
+
+    <!-- Barre de progression -->
+    <div class="progress-bar-wrap">
+      <div class="progress-label">
+        <span id="progress-label">Question 1 / 10</span>
+        <span id="question-num"></span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Carte question -->
+    <div class="question-card">
+      <div class="question-meta">
+        <span class="badge badge-cat" id="question-cat">Catégorie</span>
+        <span class="badge badge-n1" id="question-niveau">CE1 ★</span>
+      </div>
+      <p class="question-text" id="question-text">Question…</p>
+    </div>
+
+    <!-- Grille des options -->
+    <div class="options-grid" id="options-grid">
+      <!-- Boutons générés dynamiquement -->
+    </div>
+
+    <!-- Feedback -->
+    <div class="feedback-box" id="feedback-box">
+      <div id="feedback-text"></div>
+      <div class="feedback-explication" id="feedback-explication"></div>
+    </div>
+
+    <!-- Bouton Suivant -->
+    <button id="btn-next" class="btn btn-large">Question suivante →</button>
+
+  </section>
+
+  <!-- ── ÉCRAN DE SCORE ────────────────────── -->
+  <section id="screen-score" class="screen">
+
+    <span id="score-emoji" class="score-emoji" role="img">🏆</span>
+    <h2 id="score-title" class="score-title">Excellent !</h2>
+
+    <div class="score-display">
+      <span id="score-num" class="score-num">0</span>
+      <span class="score-denom"> / 10</span>
+    </div>
+
+    <p id="score-message" class="score-message">Super travail !</p>
+
+    <!-- Points visuels -->
+    <div class="score-dots" id="score-dots"></div>
+
+    <!-- Actions -->
+    <div class="score-actions">
+      <button id="btn-replay" class="btn btn-large">🔄 Rejouer</button>
+      <button id="btn-home" class="btn btn-secondary">🏠 Accueil</button>
+    </div>
+
+  </section>
+
+</div><!-- /#app -->
+
+<script src="game.js"></script>
+</body>
+</html>
