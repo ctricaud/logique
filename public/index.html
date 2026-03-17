@@ -18,12 +18,36 @@
 
     <div class="welcome-info">
       <p>🎯 <strong>10 questions</strong> de logique par partie</p>
-      <p>📚 Questions de <strong>CE1 à CM1</strong></p>
       <p>✅ Choix multiples — clique sur la bonne réponse</p>
       <p>🏆 Score final sur <strong>10</strong></p>
     </div>
 
-    <button id="btn-start" class="btn btn-large">▶ Jouer !</button>
+    <p class="choose-label">Choisis ta banque de questions :</p>
+
+    <div class="banque-grid">
+      <button class="btn-banque" data-banque="ce1">
+        <span class="banque-emoji">🌱</span>
+        <span class="banque-titre">CE1</span>
+        <span class="banque-info">200 questions</span>
+      </button>
+      <button class="btn-banque" data-banque="ce2">
+        <span class="banque-emoji">📗</span>
+        <span class="banque-titre">CE2</span>
+        <span class="banque-info">200 questions</span>
+      </button>
+      <button class="btn-banque" data-banque="ce1ce2">
+        <span class="banque-emoji">📚</span>
+        <span class="banque-titre">CE1 + CE2</span>
+        <span class="banque-info">400 questions</span>
+      </button>
+      <button class="btn-banque" data-banque="mixte">
+        <span class="banque-emoji">🏆</span>
+        <span class="banque-titre">CE1 + CE2 + CM1</span>
+        <span class="banque-info">200 questions mixtes</span>
+      </button>
+    </div>
+
+    <button id="btn-start" class="btn btn-large" disabled>▶ Jouer !</button>
   </section>
 
   <!-- ── CHARGEMENT ────────────────────────── -->

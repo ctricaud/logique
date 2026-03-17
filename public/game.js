@@ -8,6 +8,7 @@ let questions = [];
 let currentIndex = 0;
 let score = 0;
 let results = [];
+let banqueChoisie = null;   // clé de la banque sélectionnée
 
 // ── Éléments du DOM ──────────────────────────
 const screens = {
@@ -45,11 +46,26 @@ function showScreen(name) {
   if (screens[name]) screens[name].classList.add('active');
 }
 
+// ── Sélection de la banque ────────────────────
+document.querySelectorAll('.btn-banque').forEach(btn => {
+  btn.addEventListener('click', () => {
+    // Retirer la sélection précédente
+    document.querySelectorAll('.btn-banque').forEach(b => b.classList.remove('selected'));
+    // Sélectionner ce bouton
+    btn.classList.add('selected');
+    banqueChoisie = btn.dataset.banque;
+    // Activer le bouton Jouer
+    els.startBtn.disabled = false;
+    els.startBtn.classList.add('ready');
+  });
+});
+
 // ── Démarrage d'une partie ────────────────────
 async function startGame() {
+  if (!banqueChoisie) return;
   showScreen('loading');
   try {
-    const res = await fetch('/api/questions');
+    const res = await fetch('/api/questions?banque=' + banqueChoisie);
     if (!res.ok) throw new Error('Erreur serveur');
     questions = await res.json();
     if (!questions.length) throw new Error('Aucune question reçue');
@@ -84,10 +100,7 @@ function renderQuestion() {
 
   // Options
   els.optionsGrid.innerHTML = '';
-
-  // Mélanger les options pour chaque affichage
   const shuffledOptions = shuffle([...q.options]);
-
   shuffledOptions.forEach((opt, i) => {
     const btn = document.createElement('button');
     btn.className = 'option-btn';
@@ -108,7 +121,6 @@ function renderQuestion() {
 
 // ── Sélection d'une réponse ───────────────────
 function selectAnswer(btn, question) {
-  // Désactiver tous les boutons
   const allBtns = els.optionsGrid.querySelectorAll('.option-btn');
   allBtns.forEach(b => { b.disabled = true; });
 
@@ -122,28 +134,21 @@ function selectAnswer(btn, question) {
   } else {
     btn.classList.add('wrong');
     results.push(false);
-    // Révéler la bonne réponse
     allBtns.forEach(b => {
-      if (b.dataset.value === question.reponse) {
-        b.classList.add('revealed');
-      }
+      if (b.dataset.value === question.reponse) b.classList.add('revealed');
     });
     showFeedback(false, question.explication);
   }
 
-  // Afficher bouton Suivant / Résultats
   els.nextBtn.classList.add('show');
-  if (currentIndex === questions.length - 1) {
-    els.nextBtn.textContent = '🏁 Voir mes résultats';
-  } else {
-    els.nextBtn.textContent = 'Question suivante →';
-  }
+  els.nextBtn.textContent = (currentIndex === questions.length - 1)
+    ? '🏁 Voir mes résultats'
+    : 'Question suivante →';
 }
 
 // ── Feedback ─────────────────────────────────
 function showFeedback(isCorrect, explication) {
   els.feedbackBox.style.display = 'block';
-
   if (isCorrect) {
     els.feedbackBox.className = 'feedback-box show correct-fb';
     els.feedbackText.innerHTML = '<span class="feedback-icon">✅</span> Bravo, bonne réponse !';
@@ -151,7 +156,6 @@ function showFeedback(isCorrect, explication) {
     els.feedbackBox.className = 'feedback-box show wrong-fb';
     els.feedbackText.innerHTML = '<span class="feedback-icon">❌</span> Ce n\'est pas la bonne réponse.';
   }
-
   els.feedbackExplic.textContent = explication || '';
 }
 
@@ -172,7 +176,6 @@ function showScore() {
   const total = questions.length;
   const pct = Math.round((score / total) * 100);
 
-  // Emoji et message selon le score
   let emoji, titre, message;
   if (pct === 100) {
     emoji = '🏆'; titre = 'Parfait !';
@@ -193,10 +196,9 @@ function showScore() {
 
   els.scoreEmoji.textContent = emoji;
   els.scoreTitle.textContent = titre;
-  els.scoreNum.textContent = score;   // ← uniquement le chiffre, le "/ 10" est dans l'HTML
+  els.scoreNum.textContent = score;   // le "/ 10" est dans l'HTML
   els.scoreMessage.textContent = message;
 
-  // Points visuels
   els.scoreDots.innerHTML = '';
   results.forEach((ok, i) => {
     const dot = document.createElement('div');
@@ -207,6 +209,13 @@ function showScore() {
   });
 
   window.scrollTo(0, 0);
+}
+
+// ── Retour à l'accueil : reset de la sélection ──
+function goHome() {
+  // On ne remet PAS banqueChoisie à null pour garder la sélection
+  // L'utilisateur peut rechoisir ou rejouer avec la même banque
+  showScreen('welcome');
 }
 
 // ── Utilitaires ───────────────────────────────
@@ -226,14 +235,10 @@ function shuffle(arr) {
 
 // ── Événements ────────────────────────────────
 els.startBtn.addEventListener('click', startGame);
-
 els.nextBtn.addEventListener('click', nextQuestion);
-
 els.replayBtn.addEventListener('click', startGame);
+els.homeBtn.addEventListener('click', goHome);
 
-els.homeBtn.addEventListener('click', () => showScreen('welcome'));
-
-// Clavier : Entrée pour valider / suivant
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     if (els.nextBtn.classList.contains('show') && screens.game.classList.contains('active')) {

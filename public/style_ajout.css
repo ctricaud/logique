@@ -1,0 +1,95 @@
+
+/* ============ CHOIX DE BANQUE ============ */
+
+.choose-label {
+  font-size: var(--font-size-lg);
+  color: var(--text-dim);
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.banque-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 36px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-banque {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 16px;
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  font-family: inherit;
+}
+
+.btn-banque:hover,
+.btn-banque:focus {
+  border-color: var(--accent);
+  background: var(--surface2);
+  outline: none;
+  transform: scale(1.02);
+}
+
+.btn-banque.selected {
+  border-color: var(--accent);
+  background: rgba(255, 221, 0, 0.08);
+}
+
+.banque-emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.banque-titre {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: center;
+}
+
+.banque-info {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+/* Bouton Jouer grisé tant qu'aucune banque n'est choisie */
+#btn-start:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+#btn-start:disabled:hover {
+  background: transparent;
+  color: var(--accent);
+}
+
+@media (max-width: 500px) {
+  .banque-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .btn-banque {
+    padding: 14px 10px;
+  }
+
+  .banque-emoji {
+    font-size: 1.5rem;
+  }
+
+  .banque-titre {
+    font-size: 0.95rem;
+  }
+}
