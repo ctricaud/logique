@@ -19,7 +19,7 @@ const screens = {
 };
 
 const els = {
-  startBtn:       document.getElementById('btn-start'),
+  changeBtn:      document.getElementById('btn-change'),
   nextBtn:        document.getElementById('btn-next'),
   replayBtn:      document.getElementById('btn-replay'),
   homeBtn:        document.getElementById('btn-home'),
@@ -46,10 +46,10 @@ function getBanqueChoisie() {
   return radio ? radio.value : null;
 }
 
-// Activer le bouton Jouer dès qu'un radio est coché
+// Démarrer directement au clic sur un radio
 document.querySelectorAll('input[name="banque"]').forEach(radio => {
   radio.addEventListener('change', () => {
-    els.startBtn.disabled = false;
+    startGame();
   });
 });
 
@@ -248,7 +248,7 @@ function shuffle(arr) {
 }
 
 // ── Événements ────────────────────────────────
-els.startBtn.addEventListener('click', startGame);
+els.changeBtn.addEventListener('click', () => showScreen('welcome'));
 els.nextBtn.addEventListener('click', nextQuestion);
 els.replayBtn.addEventListener('click', startGame);
 els.homeBtn.addEventListener('click', () => showScreen('welcome'));

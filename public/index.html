@@ -112,16 +112,33 @@
       line-height: 1.3;
     }
 
-    /* Bouton Jouer */
-    #btn-start:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-      transform: none !important;
+    /* Hint d'accueil */
+    .welcome-hint {
+      font-size: 1.2rem;
+      color: var(--text-dim);
+      margin-top: 8px;
+      margin-bottom: 0;
+      text-align: center;
     }
-    #btn-start:disabled:hover {
-      background: transparent;
-      color: #ffdd00;
+
+    /* Lien "← Changer de jeu" pendant la partie */
+    .btn-change {
+      display: block;
+      background: none;
+      border: none;
+      color: #666666;
+      font-family: inherit;
+      font-size: 0.65rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      text-align: left;
+      transition: color 0.15s;
     }
+    .btn-change:hover { color: var(--accent); }
 
     /* Responsive badge */
     @media (max-width: 500px) {
@@ -241,13 +258,7 @@
 
     </div><!-- /.matieres-grid -->
 
-    <div class="welcome-info">
-      <p>🎯 <strong>10 questions</strong> par partie</p>
-      <p>✅ Choix multiples — clique sur la bonne réponse</p>
-      <p>🏆 Score final sur <strong>10</strong></p>
-    </div>
-
-    <button id="btn-start" class="btn btn-large" disabled>▶ Jouer !</button>
+    <p class="welcome-hint">👆 Clique sur un niveau pour démarrer !</p>
 
   </section>
 
@@ -261,6 +272,8 @@
 
   <!-- ── ÉCRAN DE JEU ──────────────────────── -->
   <section id="screen-game" class="screen">
+
+    <button id="btn-change" class="btn-change">← Changer de jeu</button>
 
     <div class="progress-bar-wrap">
       <div class="progress-label">
