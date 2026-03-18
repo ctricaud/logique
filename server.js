@@ -22,22 +22,43 @@ function loadJSON(filename) {
 }
 
 const banques = {
-  ce1:   loadJSON('questions_ce1.json'),           // 200 questions CE1
-  ce2:   loadJSON('questions_ce2.json'),           // 200 questions CE2
-  mixte: loadJSON('questions_ce1_ce2_cm1.json'),   // 200 questions CE1+CE2+CM1
+  // ── Maths ─────────────────────────────────
+  ce1:   loadJSON('questions_ce1.json'),
+  ce2:   loadJSON('questions_ce2.json'),
+  mixte: loadJSON('questions_ce1_ce2_cm1.json'),
+
+  // ── Français ──────────────────────────────
+  fr_ce1: loadJSON('questions_fr_ce1.json'),
+  fr_ce2: loadJSON('questions_fr_ce2.json'),
+
+  // ── Anglais ───────────────────────────────
+  en_ce1: loadJSON('questions_en_ce1.json'),
+  en_ce2: loadJSON('questions_en_ce2.json'),
 };
 
-// Banque combinée CE1+CE2 construite en mémoire (pas besoin de fichier)
-banques.ce1ce2 = [...banques.ce1, ...banques.ce2];
+// Banques combinées CE1+CE2 construites en mémoire
+banques.ce1ce2    = [...banques.ce1,    ...banques.ce2];
+banques.fr_ce1ce2 = [...banques.fr_ce1, ...banques.fr_ce2];
+banques.en_ce1ce2 = [...banques.en_ce1, ...banques.en_ce2];
 
-console.log(`\n📚 Banques disponibles :
-  - ce1    : ${banques.ce1.length} questions
-  - ce2    : ${banques.ce2.length} questions
-  - ce1ce2 : ${banques.ce1ce2.length} questions
-  - mixte  : ${banques.mixte.length} questions\n`);
+console.log(`
+📚 Banques disponibles :
+  ── Maths ──────────────────────
+  - ce1      : ${banques.ce1.length} questions
+  - ce2      : ${banques.ce2.length} questions
+  - ce1ce2   : ${banques.ce1ce2.length} questions
+  - mixte    : ${banques.mixte.length} questions
+  ── Français ───────────────────
+  - fr_ce1   : ${banques.fr_ce1.length} questions
+  - fr_ce2   : ${banques.fr_ce2.length} questions
+  - fr_ce1ce2: ${banques.fr_ce1ce2.length} questions
+  ── Anglais ────────────────────
+  - en_ce1   : ${banques.en_ce1.length} questions
+  - en_ce2   : ${banques.en_ce2.length} questions
+  - en_ce1ce2: ${banques.en_ce1ce2.length} questions
+`);
 
 // ── API : retourne 10 questions selon la banque choisie ──
-// Paramètre GET : ?banque=ce1 | ce2 | ce1ce2 | mixte
 app.get('/api/questions', (req, res) => {
   const banqueKey = req.query.banque || 'ce1';
   const pool = banques[banqueKey];

@@ -1,27 +1,37 @@
 ===================================================
-  JEU DE LOGIQUE - CE1 à CM1
-  Version 1.0
+  JEU ÉDUCATIF - CE1 à CM1
+  Version 2.0 — Maths · Français · Anglais
 ===================================================
 
 DESCRIPTION
 -----------
-Jeu éducatif de logique pour enfants du CE1 au CM1.
+Jeu éducatif pour enfants du CE1 au CM1.
 10 questions par partie, choix multiples, score sur 10.
-200 questions dans la base de données.
 
 Interface haute contraste : fond noir, texte blanc,
 police Atkinson Hyperlegible (très lisible).
+Sélecteur en 3 colonnes : Maths · Français · Anglais.
 
-CATÉGORIES DE QUESTIONS
-------------------------
-- Comparaisons (taille, poids, âge, vitesse...)
-- Suites logiques (nombres, lettres, motifs...)
-- Énigmes
-- Déduction (qui a quoi, qui dit vrai...)
-- Catégories (classification d'objets ou animaux)
-- Temps et calendrier (jours, mois, saisons...)
-- Espace et positions (avant, après, devant...)
-- Analogies (A est à B ce que C est à...)
+MATIÈRES ET BANQUES DE QUESTIONS
+----------------------------------
+
+🔢 MATHS
+  - CE1        : 200 questions (calcul, géométrie, problèmes…)
+  - CE2        : 200 questions (niveau intermédiaire)
+  - CE1 + CE2  : 400 questions mélangées (en mémoire)
+  - CE1→CM1    : 200 questions tous niveaux
+
+🇫🇷 FRANÇAIS
+  - CE1        : 200 questions (grammaire, orthographe, conjugaison)
+  - CE2        : 200 questions (niveau avancé)
+  - CE1 + CE2  : 400 questions mélangées (en mémoire)
+
+🇬🇧 ANGLAIS (questions en anglais, réponses en anglais)
+  - CE1        : 200 questions (vocabulaire, bases, vie quotidienne)
+  - CE2        : 200 questions (grammaire, lecture, expressions)
+  - CE1 + CE2  : 400 questions mélangées (en mémoire)
+
+TOTAL : 1 400 questions disponibles (1 000 en fichiers + 400 en mémoire)
 
 PRÉREQUIS
 ---------
@@ -32,7 +42,7 @@ INSTALLATION
 ------------
 1. Extraire le ZIP dans un dossier de votre choix
 
-2. Ouvrir un terminal (invite de commandes) dans ce dossier
+2. Ouvrir un terminal dans ce dossier
 
 3. Installer les dépendances :
    npm install
@@ -46,43 +56,49 @@ INSTALLATION
 
 UTILISATION
 -----------
-- Cliquer sur "▶ Jouer !" pour démarrer une partie
+- Choisir une matière et un niveau sur l'écran d'accueil
+- Cliquer sur "▶ Jouer !" pour démarrer
 - Lire la question et cliquer sur la réponse choisie
 - Un feedback immédiat s'affiche (bonne / mauvaise réponse)
 - La touche ENTRÉE permet de passer à la question suivante
 - À la fin : score sur 10 avec un message d'encouragement
-- Cliquer "Rejouer" pour une nouvelle partie avec de nouvelles questions
+- Cliquer "Rejouer" ou "Accueil" pour continuer
 
 STRUCTURE DES FICHIERS
 ----------------------
 jeu-logique/
-├── package.json          Configuration Node.js
-├── server.js             Serveur Express
-├── README.txt            Ce fichier
+├── package.json                     Configuration Node.js
+├── server.js                        Serveur Express
+├── README.txt                       Ce fichier
 ├── public/
-│   ├── index.html        Interface du jeu
-│   ├── style.css         Styles haute contraste
-│   └── game.js           Logique du jeu (côté client)
+│   ├── index.html                   Interface (3 colonnes)
+│   ├── style.css                    Styles haute contraste
+│   └── game.js                      Logique du jeu (côté client)
 └── data/
-    └── questions.json    Base de 200 questions
+    ├── questions_ce1.json           200 questions Maths CE1
+    ├── questions_ce2.json           200 questions Maths CE2
+    ├── questions_ce1_ce2_cm1.json   200 questions Maths mixtes
+    ├── questions_fr_ce1.json        200 questions Français CE1
+    ├── questions_fr_ce2.json        200 questions Français CE2
+    ├── questions_en_ce1.json        200 questions Anglais CE1
+    └── questions_en_ce2.json        200 questions Anglais CE2
 
-PERSONNALISATION
-----------------
-Les questions sont dans data/questions.json
-Vous pouvez en ajouter ou en modifier facilement.
-
-Format d'une question :
+FORMAT D'UNE QUESTION
+---------------------
 {
-  "id": 201,
-  "categorie": "Comparaisons",
-  "niveau": 1,
-  "question": "Votre question ici ?",
-  "options": ["Choix A", "Choix B", "Choix C"],
+  "id": 1,
+  "categorie": "Grammaire",
+  "niveau": "fr_ce1",
+  "question": "Texte de la question ?",
+  "options": ["Choix A", "Choix B", "Choix C", "Choix D"],
   "reponse": "Choix A",
   "explication": "Explication de la bonne réponse."
 }
 
-Niveaux : 1 = CE1, 2 = CE2, 3 = CM1
+Niveaux :
+  - Maths     : 1 = CE1, 2 = CE2, 3 = CM1
+  - Français  : "fr_ce1", "fr_ce2"
+  - Anglais   : "en_ce1", "en_ce2"
 
 CHANGER LE PORT
 ---------------

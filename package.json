@@ -1,7 +1,7 @@
 {
   "name": "jeu-logique-enfant",
-  "version": "1.0.0",
-  "description": "Jeu de logique pour enfants CE1-CM1",
+  "version": "2.0.0",
+  "description": "Jeu éducatif pour enfants CE1-CM1 — Maths, Français, Anglais",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

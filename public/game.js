@@ -1,5 +1,6 @@
 /* =============================================
-   JEU DE LOGIQUE - Logique côté client
+   JEU ÉDUCATIF - Logique côté client
+   Maths · Français · Anglais — CE1/CE2/CM1
    ============================================= */
 
 const LETTERS = ['A', 'B', 'C', 'D'];
@@ -90,10 +91,15 @@ function renderQuestion() {
   els.progressLabel.textContent = `Question ${currentIndex + 1} / ${total}`;
 
   els.questionCat.textContent = q.categorie;
-  els.questionNiveau.textContent = niveauLabel(q.niveau);
-  els.questionNiveau.className = 'badge badge-n' + q.niveau;
+
+  // Badge niveau — gère maths (1/2/3) et nouvelles matières (fr_ce1 etc.)
+  const { label, cssClass } = niveauInfo(q.niveau);
+  els.questionNiveau.textContent = label;
+  els.questionNiveau.className = 'badge ' + cssClass;
+
   els.questionText.textContent = q.question;
 
+  // ── Rendu des options (jusqu'à 4 choix) ──
   els.optionsGrid.innerHTML = '';
   const shuffledOptions = shuffle([...q.options]);
   shuffledOptions.forEach((opt, i) => {
@@ -173,10 +179,10 @@ function showScore() {
   let emoji, titre, message;
   if (pct === 100) {
     emoji = '🏆'; titre = 'Parfait !';
-    message = 'Tu as tout juste ! Tu es un champion de la logique !';
+    message = 'Tu as tout juste ! Tu es un champion !';
   } else if (pct >= 80) {
     emoji = '⭐'; titre = 'Excellent !';
-    message = 'Super travail ! Tu maîtrises très bien la logique !';
+    message = 'Super travail ! Tu maîtrises très bien !';
   } else if (pct >= 60) {
     emoji = '👍'; titre = 'Bien joué !';
     message = 'Tu t\'en sors bien ! Continue de t\'entraîner !';
@@ -185,7 +191,7 @@ function showScore() {
     message = 'C\'est un bon début ! Rejoue pour t\'améliorer !';
   } else {
     emoji = '🌱'; titre = 'Tu apprends !';
-    message = 'Ne te décourage pas, la logique s\'apprend avec de la pratique !';
+    message = 'Ne te décourage pas, ça s\'apprend avec de la pratique !';
   }
 
   els.scoreEmoji.textContent = emoji;
@@ -206,9 +212,30 @@ function showScore() {
 }
 
 // ── Utilitaires ───────────────────────────────
+
+/**
+ * Retourne { label, cssClass } pour le badge niveau.
+ * Gère les anciens niveaux numériques (maths) et les nouveaux string (fr_ce1 etc.)
+ */
+function niveauInfo(niveau) {
+  // Anciens codes numériques (Maths)
+  if (niveau === 1 || niveau === '1') return { label: 'CE1 ★',     cssClass: 'badge-n1' };
+  if (niveau === 2 || niveau === '2') return { label: 'CE2 ★★',   cssClass: 'badge-n2' };
+  if (niveau === 3 || niveau === '3') return { label: 'CM1 ★★★',  cssClass: 'badge-n3' };
+
+  // Nouveaux codes string
+  const map = {
+    'fr_ce1':   { label: 'FR · CE1',  cssClass: 'badge-fr1' },
+    'fr_ce2':   { label: 'FR · CE2',  cssClass: 'badge-fr2' },
+    'en_ce1':   { label: 'EN · CE1',  cssClass: 'badge-en1' },
+    'en_ce2':   { label: 'EN · CE2',  cssClass: 'badge-en2' },
+  };
+  return map[niveau] || { label: String(niveau), cssClass: 'badge-n1' };
+}
+
+/** Ancienne signature conservée pour compatibilité */
 function niveauLabel(n) {
-  const labels = { 1: 'CE1 ★', 2: 'CE2 ★★', 3: 'CM1 ★★★' };
-  return labels[n] || 'Niveau ' + n;
+  return niveauInfo(n).label;
 }
 
 function shuffle(arr) {

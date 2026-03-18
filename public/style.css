@@ -1,5 +1,5 @@
 /* =============================================
-   JEU DE LOGIQUE - Interface haute contraste
+   JEU ÉDUCATIF - Interface haute contraste
    Fond noir, texte blanc, police très lisible
    ============================================= */
 
@@ -49,7 +49,7 @@ body {
 /* ============ ÉCRAN PRINCIPAL ============ */
 #app {
   width: 100%;
-  max-width: 860px;
+  max-width: 1100px;
 }
 
 .screen {
@@ -100,6 +100,9 @@ body {
   padding: 28px;
   margin-bottom: 40px;
   text-align: left;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .welcome-info p {
@@ -226,9 +229,21 @@ body {
   color: #6688ff;
 }
 
+/* Badges maths (anciens niveaux numériques) */
 .badge-n1 { border-color: #00cc66; color: #00cc66; }
 .badge-n2 { border-color: #ffaa00; color: #ffaa00; }
 .badge-n3 { border-color: #ff6644; color: #ff6644; }
+
+/* Badges Français */
+.badge-fr1 { border-color: #ffa000; color: #ffa000; }
+.badge-fr2 { border-color: #ff6600; color: #ff6600; }
+
+/* Badges Anglais */
+.badge-en1 { border-color: #00a0ff; color: #00a0ff; }
+.badge-en2 { border-color: #0066ff; color: #0066ff; }
+
+/* Badge générique (fallback) */
+.badge-niveau { border-color: #aaaaaa; color: #aaaaaa; }
 
 .question-text {
   font-size: var(--font-size-lg);
@@ -243,6 +258,13 @@ body {
   grid-template-columns: 1fr;
   gap: 14px;
   margin-bottom: 28px;
+}
+
+/* 2 colonnes dès 600px (fonctionne pour 3 ou 4 options) */
+@media (min-width: 600px) {
+  .options-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .option-btn {
@@ -290,115 +312,112 @@ body {
   color: var(--accent);
 }
 
+/* ── États de réponse ── */
 .option-btn.correct {
   border-color: var(--success);
-  background: rgba(0, 255, 136, 0.08);
+  background: rgba(0, 255, 136, 0.12);
   color: var(--success);
 }
 
 .option-btn.correct::before {
   border-color: var(--success);
-  background: var(--success);
-  color: #000;
-  content: '✓';
+  color: var(--success);
 }
 
 .option-btn.wrong {
   border-color: var(--error);
-  background: rgba(255, 68, 68, 0.08);
+  background: rgba(255, 68, 68, 0.12);
   color: var(--error);
 }
 
 .option-btn.wrong::before {
   border-color: var(--error);
-  background: var(--error);
-  color: #fff;
-  content: '✗';
+  color: var(--error);
 }
 
 .option-btn.revealed {
   border-color: var(--success);
-  background: rgba(0, 255, 136, 0.06);
+  background: rgba(0, 255, 136, 0.07);
   color: var(--success);
 }
 
 .option-btn.revealed::before {
   border-color: var(--success);
   color: var(--success);
-  content: '✓';
 }
 
-.option-btn:disabled {
-  cursor: default;
+/* ── Bouton "Suivant" caché par défaut ── */
+#btn-next {
+  display: none;
+}
+#btn-next.show {
+  display: inline-block;
 }
 
 /* ============ FEEDBACK ============ */
 .feedback-box {
-  padding: 20px 24px;
-  border-radius: var(--radius);
-  font-size: 1.1rem;
-  font-weight: 700;
-  line-height: 1.5;
-  margin-bottom: 24px;
   display: none;
-}
-
-.feedback-box.show {
-  display: block;
-  animation: fadeIn 0.2s ease;
+  padding: 20px 28px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  border: 2px solid transparent;
+  font-size: 1.05rem;
+  line-height: 1.5;
 }
 
 .feedback-box.correct-fb {
-  background: rgba(0, 255, 136, 0.1);
-  border: 2.5px solid var(--success);
-  color: var(--success);
+  border-color: var(--success);
+  background: rgba(0, 255, 136, 0.08);
 }
 
 .feedback-box.wrong-fb {
-  background: rgba(255, 68, 68, 0.1);
-  border: 2.5px solid var(--error);
-  color: var(--error);
+  border-color: var(--error);
+  background: rgba(255, 68, 68, 0.08);
+}
+
+#feedback-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .feedback-icon {
   font-size: 1.4rem;
-  margin-right: 10px;
 }
 
 .feedback-explication {
-  color: var(--text-dim);
-  font-weight: 400;
-  margin-top: 8px;
   font-size: 1rem;
+  color: var(--text-dim);
+  font-style: italic;
 }
 
-/* ============ BTN SUIVANT ============ */
-#btn-next {
-  display: none;
-  width: 100%;
-  margin-top: 8px;
-}
-
-#btn-next.show {
-  display: block;
-}
-
-/* ============ ÉCRAN DE SCORE ============ */
+/* ============ SCORE ============ */
 #screen-score {
   text-align: center;
 }
 
 .score-emoji {
-  font-size: 80px;
+  font-size: 100px;
   display: block;
   margin-bottom: 20px;
+  line-height: 1;
+  animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  80%  { transform: scale(1.1); }
+  100% { transform: scale(1);   opacity: 1; }
 }
 
 .score-title {
   font-size: var(--font-size-xl);
   font-weight: 700;
   color: var(--accent);
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .score-display {
@@ -422,12 +441,6 @@ body {
   color: var(--text-dim);
   margin-bottom: 32px;
   line-height: 1.4;
-}
-
-/* Barre de score visuelle */
-.score-bar-wrap {
-  margin: 28px auto;
-  max-width: 500px;
 }
 
 .score-dots {
@@ -493,25 +506,24 @@ body {
 }
 
 /* ============ RESPONSIVE ============ */
-@media (min-width: 600px) {
-  .options-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
 @media (max-width: 500px) {
   :root {
-    --font-size-base: 20px;
-    --font-size-lg: 24px;
-    --font-size-xl: 30px;
-    --font-size-xxl: 38px;
+    --font-size-base: 18px;
+    --font-size-lg: 22px;
+    --font-size-xl: 28px;
+    --font-size-xxl: 36px;
   }
 
   .question-card {
-    padding: 24px 20px;
+    padding: 20px 16px;
   }
 
   .score-display {
     font-size: 60px;
+  }
+
+  .btn-large {
+    padding: 18px 32px;
+    font-size: var(--font-size-lg);
   }
 }
