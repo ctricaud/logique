@@ -7,262 +7,361 @@
   <link rel="stylesheet" href="style.css" />
   <style>
     /* ══════════════════════════════════════════
-       ACCUEIL — 3 COLONNES
+       PROFIL — Écran de connexion / création
     ══════════════════════════════════════════ */
-    #screen-welcome {
-      text-align: center;
-    }
+    #screen-profil { text-align: center; max-width: 620px; margin: 0 auto; }
+    .profil-title  { font-size: var(--font-size-xl); font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+    .profil-subtitle { font-size: 1rem; color: var(--text-dim); margin-bottom: 32px; }
 
-    /* Titre élargi pour accueillir 3 colonnes */
+    .profil-liste { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+    .profil-card {
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 20px; background: #111; border: 2px solid #333;
+      border-radius: 12px; cursor: pointer;
+      transition: border-color 0.15s, background 0.15s; text-align: left;
+    }
+    .profil-card:hover { border-color: var(--accent); background: #1a1a1a; }
+    .profil-card-avatar { font-size: 2.2rem; line-height: 1; }
+    .profil-card-nom  { font-size: 1.2rem; font-weight: 700; color: var(--text); }
+    .profil-card-stats { font-size: 0.8rem; color: #888; margin-top: 2px; }
+    .profil-card-arrow { color: #555; font-size: 1.2rem; margin-left: auto; }
+
+    .nouveau-profil-btn {
+      width: 100%; padding: 14px; background: none;
+      border: 2px dashed #444; border-radius: 12px;
+      color: #888; font-family: inherit; font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: border-color 0.15s, color 0.15s;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .nouveau-profil-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    #form-creation { display: none; }
+    #form-creation.visible { display: block; }
+
+    .form-sep { border-top: 1px solid #222; margin: 24px 0; }
+    .form-group { margin-bottom: 20px; text-align: left; }
+    .form-label {
+      display: block; font-size: 0.85rem; font-weight: 700; color: #aaa;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+    }
+    .form-input {
+      width: 100%; padding: 16px 20px; background: #111;
+      border: 2px solid #333; border-radius: 10px;
+      color: #fff; font-family: inherit; font-size: 1.3rem;
+      font-weight: 700; outline: none; transition: border-color 0.15s;
+    }
+    .form-input:focus { border-color: var(--accent); }
+
+    .avatar-grid {
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 24px;
+    }
+    @media (max-width: 480px) { .avatar-grid { grid-template-columns: repeat(4, 1fr); } }
+    .avatar-option {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 10px 6px; background: #111; border: 2px solid #333;
+      border-radius: 10px; cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .avatar-option:hover { border-color: #666; background: #1a1a1a; }
+    .avatar-option.selected { border-color: var(--accent); background: rgba(255,221,0,0.08); }
+    .avatar-option-emoji { font-size: 1.8rem; line-height: 1; }
+    .avatar-option-label { font-size: 0.6rem; color: #888; text-transform: uppercase; letter-spacing: 0.3px; }
+    .avatar-option.selected .avatar-option-label { color: var(--accent); }
+
+    .btn-creer {
+      width: 100%; padding: 18px; background: var(--accent); color: #000;
+      border: none; border-radius: 12px; font-family: inherit;
+      font-size: 1.2rem; font-weight: 700; cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .btn-creer:hover { opacity: 0.9; transform: scale(1.02); }
+    .btn-creer:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+    /* ══════════════════════════════════════════
+       ACCUEIL — Header profil + 3 colonnes
+    ══════════════════════════════════════════ */
+    #screen-welcome { text-align: center; }
     #app { max-width: 1100px; }
 
+    .accueil-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; padding: 14px 20px;
+      background: #111; border: 2px solid #222; border-radius: 14px;
+    }
+    .accueil-profil-info { display: flex; align-items: center; gap: 14px; }
+    .accueil-avatar { font-size: 2.2rem; line-height: 1; }
+    .accueil-nom  { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+    .accueil-sous { font-size: 0.78rem; color: #888; margin-top: 2px; }
+    .accueil-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .btn-tableau {
+      padding: 9px 14px; background: none; border: 2px solid #444;
+      border-radius: 8px; color: #aaa; font-family: inherit;
+      font-size: 0.75rem; font-weight: 700; cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .btn-tableau:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-changer-profil {
+      padding: 9px 14px; background: none; border: 2px solid #2a2a2a;
+      border-radius: 8px; color: #555; font-family: inherit;
+      font-size: 0.75rem; font-weight: 700; cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .btn-changer-profil:hover { border-color: #666; color: #aaa; }
+
     .matieres-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 24px;
-      margin: 0 auto 32px;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;
+      margin: 0 auto 20px;
     }
-
-    @media (max-width: 760px) {
-      .matieres-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-    }
-
-    /* ── Colonne matière ── */
+    @media (max-width: 760px) { .matieres-grid { grid-template-columns: 1fr; gap: 14px; } }
     .matiere-col {
-      background: #111111;
-      border: 2px solid #2a2a2a;
-      border-radius: 16px;
-      padding: 20px 16px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      background: #111; border: 2px solid #2a2a2a; border-radius: 14px;
+      padding: 16px 13px 13px; display: flex; flex-direction: column; gap: 9px;
     }
-
     .matiere-col-title {
-      font-size: 1.35rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      letter-spacing: 0.5px;
+      font-size: 1.15rem; font-weight: 700; margin-bottom: 4px;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
     }
-
-    /* Couleurs de colonne */
-    .col-maths   { border-color: #00c864; }
+    .matiere-etoiles {
+      display: flex; justify-content: center; gap: 2px;
+      margin-bottom: 6px; flex-wrap: wrap; min-height: 16px;
+    }
+    .col-maths    { border-color: #00c864; }
     .col-francais { border-color: #ffa000; }
-    .col-anglais { border-color: #00a0ff; }
-
-    .col-maths .matiere-col-title   { color: #00c864; }
+    .col-anglais  { border-color: #00a0ff; }
+    .col-maths .matiere-col-title    { color: #00c864; }
     .col-francais .matiere-col-title { color: #ffa000; }
     .col-anglais .matiere-col-title  { color: #00a0ff; }
 
-    /* ── Cartes de banque ── */
-    .banque-item input[type="radio"] {
-      position: absolute;
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .banque-item {
-      cursor: pointer;
-      display: block;
-    }
+    .banque-item input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .banque-item { cursor: pointer; display: block; }
     .banque-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      padding: 14px 12px;
-      background: #1a1a1a;
-      border: 2px solid #333333;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 12px 10px; background: #1a1a1a; border: 2px solid #333;
       border-radius: 10px;
-      transition: border-color 0.15s, background 0.15s, transform 0.1s;
-      user-select: none;
-      text-align: center;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s; text-align: center;
     }
-    .banque-item:hover .banque-card {
-      background: #222222;
-      transform: translateY(-2px);
-    }
-    .col-maths    .banque-item input[type="radio"]:checked + .banque-card { border-color: #00c864; background: rgba(0,200,100,0.08); }
-    .col-francais .banque-item input[type="radio"]:checked + .banque-card { border-color: #ffa000; background: rgba(255,160,0,0.08); }
-    .col-anglais  .banque-item input[type="radio"]:checked + .banque-card { border-color: #00a0ff; background: rgba(0,160,255,0.08); }
-
+    .banque-item:hover .banque-card { background: #222; transform: translateY(-2px); }
+    .col-maths    .banque-item:hover .banque-card { border-color: #00c864; }
+    .col-francais .banque-item:hover .banque-card { border-color: #ffa000; }
+    .col-anglais  .banque-item:hover .banque-card { border-color: #00a0ff; }
     .banque-badge {
-      display: inline-block;
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+      display: inline-block; padding: 5px 12px;
+      border-radius: 6px; font-size: 0.9rem; font-weight: 700;
     }
-    /* Badge couleurs par colonne */
-    .col-maths    .banque-badge { background: rgba(0,200,100,0.15); border: 2px solid #00c864; color: #00c864; }
-    .col-francais .banque-badge { background: rgba(255,160,0,0.15);  border: 2px solid #ffa000; color: #ffa000; }
-    .col-anglais  .banque-badge { background: rgba(0,160,255,0.15);  border: 2px solid #00a0ff; color: #00a0ff; }
+    .col-maths    .banque-badge { background: rgba(0,200,100,0.12); border: 2px solid #00c864; color: #00c864; }
+    .col-francais .banque-badge { background: rgba(255,160,0,0.12);  border: 2px solid #ffa000; color: #ffa000; }
+    .col-anglais  .banque-badge { background: rgba(0,160,255,0.12);  border: 2px solid #00a0ff; color: #00a0ff; }
+    .banque-desc  { font-size: 0.75rem; color: #999; line-height: 1.3; }
+    .welcome-hint { font-size: 0.95rem; color: #555; margin-top: 4px; text-align: center; }
 
-    .banque-desc {
-      font-size: 0.85rem;
-      color: #aaaaaa;
-      line-height: 1.3;
+    /* ══════════════════════════════════════════
+       TABLEAU DE BORD
+    ══════════════════════════════════════════ */
+    #screen-tableau { max-width: 700px; margin: 0 auto; }
+    .tableau-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;
+    }
+    .tableau-title { font-size: var(--font-size-xl); font-weight: 700; color: var(--accent); }
+    .btn-retour {
+      background: none; border: none; color: #666; font-family: inherit;
+      font-size: 0.75rem; font-weight: 700; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 0.5px; transition: color 0.15s;
+    }
+    .btn-retour:hover { color: var(--accent); }
+
+    .dragon-bloc {
+      background: #111; border: 2px solid #2a2a2a; border-radius: 14px;
+      padding: 24px; text-align: center; margin-bottom: 16px;
+    }
+    .dragon-svg-wrap { margin-bottom: 10px; font-size: 5rem; line-height: 1; }
+    .dragon-nom { font-size: 1.2rem; font-weight: 700; color: #c084fc; margin-bottom: 6px; }
+    .dragon-progress-label { font-size: 0.82rem; color: #888; margin-bottom: 10px; }
+    .dragon-progress-track {
+      height: 10px; background: #222; border-radius: 5px;
+      border: 1px solid #333; overflow: hidden;
+      max-width: 300px; margin: 0 auto;
+    }
+    .dragon-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #7c3aed, #c084fc);
+      border-radius: 5px; transition: width 0.6s ease;
+    }
+    .dragon-next-label { color: #888; font-size: 0.78rem; margin-top: 8px; }
+
+    .streak-bloc {
+      background: #111; border: 2px solid #2a2a2a; border-radius: 14px;
+      padding: 18px 22px; display: flex; align-items: center;
+      gap: 16px; margin-bottom: 16px;
+    }
+    .streak-emoji { font-size: 2.2rem; }
+    .streak-info-titre { font-size: 1rem; font-weight: 700; color: var(--text); }
+    .streak-info-val   { font-size: 0.82rem; color: #888; margin-top: 2px; }
+
+    .etoiles-bloc {
+      background: #111; border: 2px solid #2a2a2a; border-radius: 14px;
+      padding: 20px 22px; margin-bottom: 16px;
+    }
+    .etoiles-titre {
+      font-size: 0.9rem; font-weight: 700; color: #aaa;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;
+    }
+    .etoiles-matiere {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+    }
+    .etoiles-matiere:last-child { margin-bottom: 0; }
+    .etoiles-mat-label { font-size: 0.82rem; font-weight: 700; min-width: 90px; color: #ccc; }
+    .etoiles-row { display: flex; flex-wrap: wrap; gap: 2px; flex: 1; }
+    .etoiles-count { font-size: 0.72rem; color: #666; min-width: 38px; text-align: right; }
+
+    .badges-bloc {
+      background: #111; border: 2px solid #2a2a2a; border-radius: 14px; padding: 20px 22px;
+    }
+    .badges-titre {
+      font-size: 0.9rem; font-weight: 700; color: #aaa;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;
+    }
+    .badges-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+    .badge-card { padding: 12px; border-radius: 10px; text-align: center; border: 2px solid; }
+    .badge-card.obtenu { border-color: var(--accent); background: rgba(255,221,0,0.06); }
+    .badge-card.verrou { border-color: #2a2a2a; background: #111; opacity: 0.45; }
+    .badge-emoji { font-size: 1.7rem; display: block; margin-bottom: 5px; }
+    .badge-label { font-size: 0.72rem; font-weight: 700; color: #ccc; line-height: 1.2; }
+    .badge-desc  { font-size: 0.62rem; color: #777; margin-top: 3px; line-height: 1.3; }
+
+    /* ══════════════════════════════════════════
+       POPUP NOUVEAU BADGE
+    ══════════════════════════════════════════ */
+    #badge-popup {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85); z-index: 100;
+      align-items: center; justify-content: center;
+    }
+    #badge-popup.visible { display: flex; }
+    .badge-popup-inner {
+      background: #111; border: 3px solid var(--accent);
+      border-radius: 20px; padding: 36px 40px;
+      text-align: center; max-width: 340px;
+      animation: popIn 0.4s ease;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .popup-titre    { font-size: 1.4rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+    .popup-badge-emoji { font-size: 4rem; display: block; margin: 14px 0 10px; }
+    .popup-badge-nom  { font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .popup-badge-desc { font-size: 0.88rem; color: #aaa; margin-bottom: 22px; line-height: 1.4; }
+    .btn-popup-ok {
+      padding: 14px 40px; background: var(--accent); color: #000;
+      border: none; border-radius: 10px; font-family: inherit;
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 0.5px;
     }
 
-    /* Hint d'accueil */
-    .welcome-hint {
-      font-size: 1.2rem;
-      color: var(--text-dim);
-      margin-top: 8px;
-      margin-bottom: 0;
-      text-align: center;
-    }
-
-    /* Lien "← Changer de jeu" pendant la partie */
+    /* Lien changer de jeu */
     .btn-change {
-      display: block;
-      background: none;
-      border: none;
-      color: #666666;
-      font-family: inherit;
-      font-size: 0.65rem;
-      font-weight: 700;
-      cursor: pointer;
-      padding: 0;
-      margin-bottom: 24px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      text-align: left;
-      transition: color 0.15s;
+      display: block; background: none; border: none; color: #555;
+      font-family: inherit; font-size: 0.62rem; font-weight: 700;
+      cursor: pointer; padding: 0; margin-bottom: 20px;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      text-align: left; transition: color 0.15s;
     }
     .btn-change:hover { color: var(--accent); }
-
-    /* Responsive badge */
-    @media (max-width: 500px) {
-      .banque-card { padding: 12px 8px; }
-      .banque-badge { font-size: 0.9rem; }
-    }
   </style>
 </head>
 <body>
-
 <div id="app">
 
-  <!-- ── ÉCRAN D'ACCUEIL ───────────────────── -->
-  <section id="screen-welcome" class="screen active">
+  <!-- ════ ÉCRAN PROFIL ════ -->
+  <section id="screen-profil" class="screen active">
+    <div style="margin-bottom:24px;">
+      <span style="font-size:56px;display:block;margin-bottom:12px;">🎓</span>
+      <div class="profil-title">Qui joue ?</div>
+      <div class="profil-subtitle">Choisis ton profil ou crée-en un nouveau</div>
+    </div>
 
-    <span class="welcome-emoji" role="img" aria-label="cerveau">🎓</span>
-    <h1 class="game-title">Jeu Éducatif</h1>
-    <p class="game-subtitle">Maths · Français · Anglais</p>
+    <div id="profil-liste" class="profil-liste"></div>
+    <button class="nouveau-profil-btn" id="btn-nouveau-profil">+ Nouveau joueur</button>
 
-    <!-- Sélecteur 3 colonnes -->
-    <div class="matieres-grid">
-
-      <!-- ── Colonne MATHS ── -->
-      <div class="matiere-col col-maths">
-        <div class="matiere-col-title">🔢 Maths</div>
-
-        <label class="banque-item">
-          <input type="radio" name="banque" value="ce1" />
-          <span class="banque-card">
-            <span class="banque-badge">CE1</span>
-            <span class="banque-desc">200 questions · débutant</span>
-          </span>
-        </label>
-
-        <label class="banque-item">
-          <input type="radio" name="banque" value="ce2" />
-          <span class="banque-card">
-            <span class="banque-badge">CE2</span>
-            <span class="banque-desc">200 questions · intermédiaire</span>
-          </span>
-        </label>
-
-        <label class="banque-item">
-          <input type="radio" name="banque" value="ce1ce2" />
-          <span class="banque-card">
-            <span class="banque-badge">CE1 + CE2</span>
-            <span class="banque-desc">400 questions · mélangés</span>
-          </span>
-        </label>
-
-        <label class="banque-item">
-          <input type="radio" name="banque" value="mixte" />
-          <span class="banque-card">
-            <span class="banque-badge">CE1→CM1</span>
-            <span class="banque-desc">200 questions · tous niveaux</span>
-          </span>
-        </label>
+    <div id="form-creation">
+      <div class="form-sep"></div>
+      <div class="form-group">
+        <label class="form-label" for="input-prenom">Ton prénom</label>
+        <input class="form-input" id="input-prenom" type="text"
+               placeholder="Ex : Emma" maxlength="20" autocomplete="off" />
       </div>
-
-      <!-- ── Colonne FRANÇAIS ── -->
-      <div class="matiere-col col-francais">
-        <div class="matiere-col-title">🇫🇷 Français</div>
-
-        <label class="banque-item">
-          <input type="radio" name="banque" value="fr_ce1" />
-          <span class="banque-card">
-            <span class="banque-badge">CE1</span>
-            <span class="banque-desc">200 questions · grammaire, ortho, conjugaison</span>
-          </span>
-        </label>
-
-        <label class="banque-item">
-          <input type="radio" name="banque" value="fr_ce2" />
-          <span class="banque-card">
-            <span class="banque-badge">CE2</span>
-            <span class="banque-desc">200 questions · niveau avancé</span>
-          </span>
-        </label>
-
-        <label class="banque-item">
-          <input type="radio" name="banque" value="fr_ce1ce2" />
-          <span class="banque-card">
-            <span class="banque-badge">CE1 + CE2</span>
-            <span class="banque-desc">400 questions · mélangés</span>
-          </span>
-        </label>
+      <div class="form-group">
+        <div class="form-label">Ton animal</div>
+        <div class="avatar-grid" id="avatar-grid"></div>
       </div>
-
-      <!-- ── Colonne ANGLAIS ── -->
-      <div class="matiere-col col-anglais">
-        <div class="matiere-col-title">🇬🇧 Anglais</div>
-
-        <label class="banque-item">
-          <input type="radio" name="banque" value="en_ce1" />
-          <span class="banque-card">
-            <span class="banque-badge">CE1</span>
-            <span class="banque-desc">200 questions · vocabulaire &amp; bases</span>
-          </span>
-        </label>
-
-        <label class="banque-item">
-          <input type="radio" name="banque" value="en_ce2" />
-          <span class="banque-card">
-            <span class="banque-badge">CE2</span>
-            <span class="banque-desc">200 questions · grammaire &amp; lecture</span>
-          </span>
-        </label>
-
-        <label class="banque-item">
-          <input type="radio" name="banque" value="en_ce1ce2" />
-          <span class="banque-card">
-            <span class="banque-badge">CE1 + CE2</span>
-            <span class="banque-desc">400 questions · mélangés</span>
-          </span>
-        </label>
-      </div>
-
-    </div><!-- /.matieres-grid -->
-
-    <p class="welcome-hint">👆 Clique sur un niveau pour démarrer !</p>
-
+      <button class="btn-creer" id="btn-creer" disabled>C'est parti ! 🚀</button>
+    </div>
   </section>
 
-  <!-- ── CHARGEMENT ────────────────────────── -->
+  <!-- ════ ÉCRAN ACCUEIL ════ -->
+  <section id="screen-welcome" class="screen">
+
+    <div class="accueil-header">
+      <div class="accueil-profil-info">
+        <div class="accueil-avatar" id="accueil-avatar">🐱</div>
+        <div>
+          <div class="accueil-nom" id="accueil-nom">Emma</div>
+          <div class="accueil-sous" id="accueil-sous">0 partie · Œuf</div>
+        </div>
+      </div>
+      <div class="accueil-actions">
+        <button class="btn-tableau" id="btn-ouvrir-tableau">🏆 Mes progrès</button>
+        <button class="btn-changer-profil" id="btn-changer-profil">↩ Changer</button>
+      </div>
+    </div>
+
+    <div class="matieres-grid">
+      <!-- MATHS -->
+      <div class="matiere-col col-maths">
+        <div class="matiere-col-title">🔢 Maths</div>
+        <div class="matiere-etoiles" id="etoiles-maths"></div>
+        <label class="banque-item"><input type="radio" name="banque" value="ce1" />
+          <span class="banque-card"><span class="banque-badge">CE1</span><span class="banque-desc">200 questions · débutant</span></span></label>
+        <label class="banque-item"><input type="radio" name="banque" value="ce2" />
+          <span class="banque-card"><span class="banque-badge">CE2</span><span class="banque-desc">200 questions · intermédiaire</span></span></label>
+        <label class="banque-item"><input type="radio" name="banque" value="ce1ce2" />
+          <span class="banque-card"><span class="banque-badge">CE1 + CE2</span><span class="banque-desc">400 questions · mélangés</span></span></label>
+        <label class="banque-item"><input type="radio" name="banque" value="mixte" />
+          <span class="banque-card"><span class="banque-badge">CE1→CM1</span><span class="banque-desc">200 questions · tous niveaux</span></span></label>
+      </div>
+
+      <!-- FRANÇAIS -->
+      <div class="matiere-col col-francais">
+        <div class="matiere-col-title">🇫🇷 Français</div>
+        <div class="matiere-etoiles" id="etoiles-francais"></div>
+        <label class="banque-item"><input type="radio" name="banque" value="fr_ce1" />
+          <span class="banque-card"><span class="banque-badge">CE1</span><span class="banque-desc">200 questions · grammaire, ortho</span></span></label>
+        <label class="banque-item"><input type="radio" name="banque" value="fr_ce2" />
+          <span class="banque-card"><span class="banque-badge">CE2</span><span class="banque-desc">200 questions · niveau avancé</span></span></label>
+        <label class="banque-item"><input type="radio" name="banque" value="fr_ce1ce2" />
+          <span class="banque-card"><span class="banque-badge">CE1 + CE2</span><span class="banque-desc">400 questions · mélangés</span></span></label>
+      </div>
+
+      <!-- ANGLAIS -->
+      <div class="matiere-col col-anglais">
+        <div class="matiere-col-title">🇬🇧 Anglais</div>
+        <div class="matiere-etoiles" id="etoiles-anglais"></div>
+        <label class="banque-item"><input type="radio" name="banque" value="en_ce1" />
+          <span class="banque-card"><span class="banque-badge">CE1</span><span class="banque-desc">200 questions · vocabulaire</span></span></label>
+        <label class="banque-item"><input type="radio" name="banque" value="en_ce2" />
+          <span class="banque-card"><span class="banque-badge">CE2</span><span class="banque-desc">200 questions · grammaire</span></span></label>
+        <label class="banque-item"><input type="radio" name="banque" value="en_ce1ce2" />
+          <span class="banque-card"><span class="banque-badge">CE1 + CE2</span><span class="banque-desc">400 questions · mélangés</span></span></label>
+      </div>
+    </div>
+
+    <p class="welcome-hint">👆 Clique sur un niveau pour démarrer !</p>
+  </section>
+
+  <!-- ════ CHARGEMENT ════ -->
   <section id="loading" class="screen">
     <div style="text-align:center; padding:80px 20px;">
       <div class="spinner"></div>
@@ -270,11 +369,9 @@
     </div>
   </section>
 
-  <!-- ── ÉCRAN DE JEU ──────────────────────── -->
+  <!-- ════ ÉCRAN DE JEU ════ -->
   <section id="screen-game" class="screen">
-
     <button id="btn-change" class="btn-change">← Changer de jeu</button>
-
     <div class="progress-bar-wrap">
       <div class="progress-label">
         <span id="progress-label">Question 1 / 10</span>
@@ -284,7 +381,6 @@
         <div class="progress-fill" id="progress-fill" style="width:0%"></div>
       </div>
     </div>
-
     <div class="question-card">
       <div class="question-meta">
         <span class="badge badge-cat" id="question-cat">Catégorie</span>
@@ -292,42 +388,94 @@
       </div>
       <p class="question-text" id="question-text">Question…</p>
     </div>
-
     <div class="options-grid" id="options-grid"></div>
-
     <div class="feedback-box" id="feedback-box">
       <div id="feedback-text"></div>
       <div class="feedback-explication" id="feedback-explication"></div>
     </div>
-
     <button id="btn-next" class="btn btn-large">Question suivante →</button>
-
   </section>
 
-  <!-- ── ÉCRAN DE SCORE ────────────────────── -->
+  <!-- ════ ÉCRAN SCORE ════ -->
   <section id="screen-score" class="screen">
-
     <span id="score-emoji" class="score-emoji" role="img">🏆</span>
     <h2 id="score-title" class="score-title">Excellent !</h2>
-
     <div class="score-display">
       <span id="score-num" class="score-num">0</span>
       <span class="score-denom"> / 10</span>
     </div>
-
     <p id="score-message" class="score-message">Super travail !</p>
-
     <div class="score-dots" id="score-dots"></div>
-
     <div class="score-actions">
       <button id="btn-replay" class="btn btn-large">🔄 Rejouer</button>
-      <button id="btn-home" class="btn btn-secondary">🏠 Accueil</button>
+      <button id="btn-home"   class="btn btn-secondary">🏠 Accueil</button>
+    </div>
+  </section>
+
+  <!-- ════ TABLEAU DE BORD ════ -->
+  <section id="screen-tableau" class="screen">
+    <div class="tableau-header">
+      <div class="tableau-title">Mes progrès</div>
+      <button class="btn-retour" id="btn-retour-tableau">← Retour</button>
     </div>
 
+    <div class="dragon-bloc">
+      <div class="dragon-svg-wrap" id="dragon-svg"></div>
+      <div class="dragon-nom" id="dragon-nom">Œuf</div>
+      <div class="dragon-progress-label" id="dragon-label">0 partie jouée</div>
+      <div class="dragon-progress-track">
+        <div class="dragon-progress-fill" id="dragon-fill" style="width:0%"></div>
+      </div>
+      <div class="dragon-next-label" id="dragon-next-label"></div>
+    </div>
+
+    <div class="streak-bloc">
+      <div class="streak-emoji" id="streak-emoji">🔥</div>
+      <div>
+        <div class="streak-info-titre">Série en cours</div>
+        <div class="streak-info-val" id="streak-val">0 jour de suite</div>
+      </div>
+    </div>
+
+    <div class="etoiles-bloc">
+      <div class="etoiles-titre">⭐ Parties jouées par matière</div>
+      <div class="etoiles-matiere">
+        <div class="etoiles-mat-label">🔢 Maths</div>
+        <div class="etoiles-row" id="row-maths"></div>
+        <div class="etoiles-count" id="count-maths">0</div>
+      </div>
+      <div class="etoiles-matiere">
+        <div class="etoiles-mat-label">🇫🇷 Français</div>
+        <div class="etoiles-row" id="row-francais"></div>
+        <div class="etoiles-count" id="count-francais">0</div>
+      </div>
+      <div class="etoiles-matiere">
+        <div class="etoiles-mat-label">🇬🇧 Anglais</div>
+        <div class="etoiles-row" id="row-anglais"></div>
+        <div class="etoiles-count" id="count-anglais">0</div>
+      </div>
+    </div>
+
+    <div class="badges-bloc">
+      <div class="badges-titre">🏅 Badges</div>
+      <div class="badges-grid" id="badges-grid"></div>
+    </div>
   </section>
 
 </div><!-- /#app -->
 
+<!-- Popup nouveau badge -->
+<div id="badge-popup">
+  <div class="badge-popup-inner">
+    <div class="popup-titre">🎉 Nouveau badge !</div>
+    <span class="popup-badge-emoji" id="popup-emoji"></span>
+    <div class="popup-badge-nom" id="popup-nom"></div>
+    <div class="popup-badge-desc" id="popup-desc"></div>
+    <button class="btn-popup-ok" id="btn-popup-ok">Super !</button>
+  </div>
+</div>
+
+<script src="profil.js"></script>
 <script src="game.js"></script>
 </body>
 </html>
